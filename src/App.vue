@@ -1,10 +1,17 @@
 <template>
-  <div id="app">
-
-    <router-view/>
-  </div>
+    <div id="app">
+        <router-view />
+    </div>
 </template>
 
-<style lang="scss">
+<script>
+// import uri from "@/config/uri";
+export default {
+    // async created() {
+    //     let ret = await this.$http.get(uri.getCity);
+    //     console.log(ret);
+    // },
+};
+</script>
 
-</style>
+<style lang="scss"></style>
