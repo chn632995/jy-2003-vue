@@ -39,12 +39,19 @@ export default {
     data() {
         return {
             active: 0,
-            url: ["/films", "/cinemas", "/center"],
+            url: ["/films/nowplaying", "/cinemas", "/center"],
         };
     },
     created() {
         // 根据页面的地址纠正底部索引
-        this.active = this.url.indexOf(this.$route.path);
+        this.active =
+            this.url.indexOf(this.$route.path) >= 0
+                ? this.url.indexOf(this.$route.path)
+                : 0;
+        // 针对comingsoon的索引纠正
+        // if (this.$route.path == "/films/comingsoon") {
+        //     this.active = 0;
+        // }
     },
     methods: {
         changeTab(index) {
