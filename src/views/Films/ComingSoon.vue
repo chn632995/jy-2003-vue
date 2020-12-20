@@ -44,10 +44,9 @@
 // 导入地址
 import uri from "@/config/uri";
 import Vue from "vue";
-import { Loading, Card, PullRefresh } from "vant";
+import { Loading, Card } from "vant";
 Vue.use(Loading);
 Vue.use(Card);
-Vue.use(PullRefresh);
 export default {
     data() {
         return {
