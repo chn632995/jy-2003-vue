@@ -6,7 +6,8 @@
             <van-swipe-item>3</van-swipe-item>
             <van-swipe-item>4</van-swipe-item>
         </van-swipe> -->
-        <Footer />
+        <!-- 只负责从store中去读取数据 -->
+        <Footer v-show="$store.state.isShowFooter" />
         <router-view />
     </div>
 </template>
@@ -27,6 +28,18 @@ export default {
     // },
     components: {
         Footer,
+    },
+    data() {
+        return {
+            // 默认显示底部导航
+            isShowFooter: false,
+        };
+    },
+    created() {
+        // 接收其他组件传递来的讯息，控制底部导航是否显示
+        // this.$eventBus.$on("hide_footer", (val) => {
+        //     this.isShowFooter = val;
+        // });
     },
 };
 </script>
