@@ -94,7 +94,7 @@ export default {
             this.$http
                 .get(uri.getNowPlaying + `?pageNum=${this.pageNum}`)
                 .then((ret) => {
-                    if (this.pageNum < Math.ceil(ret.data.total / 10)) {
+                    if (this.pageNum <= Math.ceil(ret.data.total / 10)) {
                         this.pageNum++;
                         // 不要把数据覆盖了！！
                         // this.list = ret.data.films.concat(this.list);

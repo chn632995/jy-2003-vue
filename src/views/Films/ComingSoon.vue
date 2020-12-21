@@ -1,42 +1,50 @@
 <template>
-    <div id="container">
-        <van-loading size="24px" type="spinner" vertical v-show="isLoading"
-            >加载中...</van-loading
-        >
-        <van-card
-            v-for="item in list"
-            :key="item.filmId"
-            @click="gotoDetail(item.filmId)"
-        >
-            <template #title>
-                <span style="fontSize:16px;color:#191a1b"
-                    >{{ item.name }}
-                    <span class="item">{{ item.filmType.name }}</span></span
-                >
-            </template>
-            <template #thumb>
-                <img :src="item.poster" />
-            </template>
-            <template #desc>
-                <div>
-                    <div style="fontSize:14px">
-                        观众评分
-                        <span style="color:#ffb232;fontSize:16px">{{
-                            item.grade
-                        }}</span>
-                    </div>
-                    <div style="fontSize:14px">
-                        主演：{{ item.actors | parserActors }}
-                        <div class="nowPlayingFilm-buy" style="float: right;">
-                            预约
+    <!-- 可视窗口 -->
+    <div id="container" class="wrapper" :style="{ height: height + 'px' }">
+        <!-- content窗口，要求：content高度>可视窗口的高度 -->
+        <div>
+            <van-loading size="24px" type="spinner" vertical v-show="isLoading"
+                >加载中...</van-loading
+            >
+            <!-- 具体的内容条目，要求：数量一定要足够多，让其足以撑起content盒子 -->
+            <van-card
+                v-for="item in list"
+                :key="item.filmId"
+                @click="gotoDetail(item.filmId)"
+            >
+                <template #title>
+                    <span style="fontSize:16px;color:#191a1b"
+                        >{{ item.name }}
+                        <span class="item">{{ item.filmType.name }}</span></span
+                    >
+                </template>
+                <template #thumb>
+                    <img :src="item.poster" />
+                </template>
+                <template #desc>
+                    <div>
+                        <div style="fontSize:14px">
+                            观众评分
+                            <span style="color:#ffb232;fontSize:16px">{{
+                                item.grade
+                            }}</span>
+                        </div>
+                        <div style="fontSize:14px">
+                            主演：{{ item.actors | parserActors }}
+                            <div
+                                class="nowPlayingFilm-buy"
+                                style="float: right;"
+                            >
+                                预约
+                            </div>
+                        </div>
+                        <div style="fontSize:14px">
+                            {{ item.nation }} | {{ item.runtime }}分钟
                         </div>
                     </div>
-                    <div style="fontSize:14px">
-                        {{ item.nation }} | {{ item.runtime }}分钟
-                    </div>
-                </div>
-            </template>
-        </van-card>
+                </template>
+            </van-card>
+        </div>
     </div>
 </template>
 
@@ -47,6 +55,8 @@ import Vue from "vue";
 import { Loading, Card } from "vant";
 Vue.use(Loading);
 Vue.use(Card);
+// 需要导入better-scroll
+import BScroll from "better-scroll";
 export default {
     data() {
         return {
@@ -55,11 +65,38 @@ export default {
             pageNum: 1,
             // 是否显示loading组件
             isLoading: true,
+            // 定义bscroll示例
+            bs: null,
+            // 定义可视窗口的高度
+            height: 0,
+            // 记录Y轴的高度
+            y: 0,
         };
     },
     created() {
         // 获取数据
         this.getData();
+    },
+    mounted() {
+        // 重新赋值高度
+        this.height = document.documentElement.clientHeight - 94;
+    },
+    updated() {
+        // 在页面挂载完毕之后获取可视窗口的选择器，产生BS实例
+        this.bs = new BScroll(".wrapper", {
+            // BetterScroll 默认会阻止浏览器的原生 click 事件，但是去详情是需要点击的
+            click: true,
+            startY: this.y,
+            pullUpLoad: true,
+        });
+        this.bs.on("pullingUp", () => {
+            this.getData();
+            // console.log(this.bs.y);
+            // 更新数据的时候让this.y记录下当前的高度数据
+            this.y = this.bs.y;
+            // 这次上滑操作已经结束，告诉bs可以准备监听下一次滑动事件
+            this.bs.finishPullUp();
+        });
     },
     filters: {
         // 针对主演的数据处理
@@ -83,11 +120,11 @@ export default {
             this.$http
                 .get(uri.getComingSoon + `?pageNum=${this.pageNum}`)
                 .then((ret) => {
-                    if (this.pageNum < Math.ceil(ret.data.total / 10)) {
+                    if (this.pageNum <= Math.ceil(ret.data.total / 10)) {
                         this.pageNum++;
                         // 不要把数据覆盖了！！
-                        // this.list = ret.data.films.concat(this.list);
-                        this.list = [...ret.data.films, ...this.list];
+                        // this.list = this.list.concat(ret.data.films);
+                        this.list = [...this.list, ...ret.data.films];
                     }
                     if (cb == null) {
                         this.isLoading = false;
