@@ -8,5 +8,7 @@ export default {
     getNowPlaying: prefix + "getNowPlayingFilmList",
     // 即将上映数据获取
     getComingSoon: prefix + "getComingSoonFilmList",
+    // 详情数据获取
+    getFilm: prefix + "getFilmInfo",
     // ...
 };
