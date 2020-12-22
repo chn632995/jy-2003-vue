@@ -7,6 +7,7 @@ Vue.use(VueRouter);
 import filmRouter from "./routes/films";
 import cinemaRouter from "./routes/cinemas";
 import centerRouter from "./routes/center";
+import cityRouter from "./routes/city";
 // 导入测试组件
 import VuexTest1 from '@/views/Vuex/Test1';
 import VuexTest2 from '@/views/Vuex/Test2';
@@ -16,6 +17,7 @@ const routes = [
     ...filmRouter,
     cinemaRouter,
     centerRouter,
+    cityRouter,
     { path: "/vuex1", component: VuexTest1 },
     { path: "/vuex2", component: VuexTest2 },
     { path: "/", redirect: "/films" },

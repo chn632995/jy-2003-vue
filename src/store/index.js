@@ -10,6 +10,11 @@ export default new Vuex.Store({
         // classroom: "2F-5",
         // 是否显示底部导航
         isShowFooter: true,
+        // 城市信息
+        city: {
+            cityId: 0,
+            cityName: "",
+        },
     },
     // 放的是修改数据的方法（同步）
     mutations: {
@@ -25,6 +30,10 @@ export default new Vuex.Store({
         // 控制是否显示底部导航
         isShowFooterNav(state, val) {
             state.isShowFooter = val;
+        },
+        // 设置城市信息
+        setCity(state, city) {
+            state.city = city;
         },
     },
     // 放的是修改数据的方法（异步）
