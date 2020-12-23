@@ -10,6 +10,12 @@ Vue.prototype.$http = axios;
 Vue.prototype.$eventBus = new Vue();
 Vue.config.productionTip = false;
 
+// 页面刷新的时候去同步jwt
+let jwt = localStorage.getItem("jwt");
+if (jwt) {
+    store.commit("setJwt", jwt);
+}
+
 new Vue({
     router,
     store,

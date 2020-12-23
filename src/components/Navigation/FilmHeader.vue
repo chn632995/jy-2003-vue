@@ -47,6 +47,13 @@ export default {
             this.$router.push(this.url[index]);
         },
     },
+    // 监听器，监听路由的变化
+    watch: {
+        $route: function(val){
+            // console.log(val);
+            this.active = this.url.indexOf(val.fullPath);
+        }
+    }
 };
 </script>
 

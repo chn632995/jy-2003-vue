@@ -15,6 +15,8 @@ export default new Vuex.Store({
             cityId: 0,
             cityName: "",
         },
+        // 令牌
+        jwt: "",
     },
     // 放的是修改数据的方法（同步）
     mutations: {
@@ -34,6 +36,12 @@ export default new Vuex.Store({
         // 设置城市信息
         setCity(state, city) {
             state.city = city;
+        },
+        // 设置jwt
+        setJwt(state, jwt) {
+            state.jwt = jwt;
+            // 设置localStorage
+            localStorage.setItem("jwt", jwt);
         },
     },
     // 放的是修改数据的方法（异步）
